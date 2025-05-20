@@ -1,0 +1,9 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Equipamentos</title></head>
+<body>
+<h1>Equipamentos</h1>
+<ul>
+  <li th:each="e : ${equipamentos}" th:text="${e.nome}"></li>
+</ul>
+</body>
+</html>

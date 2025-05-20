@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhe do Duelista</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        td {
+            vertical-align:middle;
+        }
+    </style>
+</head>
+<body>
+<div th:insert="~{fragments/navbar}"></div>
+<div class="container">
+    <h2>
+        <img th:src="@{'/img/duelist/' + ${#numbers.formatInteger(duelist.id, 3)} + '.PNG'}"
+             class="img-fluid"
+             style="height: 96px; width: 96px;" />
+        <span th:text="${duelist.nome}"></span>
+    </h2>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="deck-tab" data-bs-toggle="tab" data-bs-target="#deck" type="button">Deck</button>
+        </li>
+        <li class="nav-item"><button class="nav-link" id="drop-pow-tab" data-bs-toggle="tab" data-bs-target="#drop-pow" type="button">SA Pow</button></li>
+        <li class="nav-item"><button class="nav-link" id="drop-bcd-tab" data-bs-toggle="tab" data-bs-target="#drop-bcd" type="button">BCD</button></li>
+        <li class="nav-item"><button class="nav-link" id="drop-tec-tab" data-bs-toggle="tab" data-bs-target="#drop-tec" type="button">SA Tec</button></li>
+    </ul>
+    <div class="tab-content mt-3">
+        <div class="tab-content mt-3">
+            <div class="tab-pane fade show active" id="deck">
+                <div th:replace="~{fragments/droptable :: dropTable(0)}"></div>
+            </div>
+            <div class="tab-pane fade" id="drop-pow">
+                <div th:replace="~{fragments/droptable :: dropTable(1)}"></div>
+            </div>
+            <div class="tab-pane fade" id="drop-bcd">
+                <div th:replace="~{fragments/droptable :: dropTable(2)}"></div>
+            </div>
+            <div class="tab-pane fade" id="drop-tec">
+                <div th:replace="~{fragments/droptable :: dropTable(3)}"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</html>

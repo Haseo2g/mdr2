@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head><title>Fragmento</title></head>
+<body>
+<th:block th:fragment="dropTable(rankOrdinal)">
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Card</th>
+      <th>Type</th>
+      <th>Guardian Stars</th>
+      <th>Chance</th>
+      <th>%</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="drop : ${drops}" th:if="${drop.rank.ordinal} == ${rankOrdinal}">
+      <td>
+        <img th:src="@{'/img/' + ${#numbers.formatInteger(drop.carta.id, 3)} + '.PNG'}"
+             class="img-fluid" style="height: 48px; width: 48px;" />
+        <span th:text="${drop.carta.typeOrdinal < 20 ? drop.carta.nome + ' (' + drop.carta.atk + '/' + drop.carta.def + ')' : drop.carta.nome}"></span>
+      <td th:text="${drop.carta.type.name}"></td>
+      <td th:text="${drop.carta.guardianStar1.name} + ', ' + ${drop.carta.guardianStar2.name}"></td>
+      <td th:text="${drop.chance} + ' / 2048'"></td>
+      <td th:text="${#numbers.formatDecimal(drop.chance / 2048.0 * 100, 1, 3)} + ' %'"></td>
+    </tr>
+    </tbody>
+  </table>
+</th:block>
+</body>
+</html>

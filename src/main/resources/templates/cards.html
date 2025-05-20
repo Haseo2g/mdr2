@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cartas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+<div th:replace="fragments/navbar"></div>
+<div class="container">
+    <h1>Cartas</h1>
+    <form class="row g-3 mb-4" method="get" action="/cards">
+        <div class="col-md-4">
+            <input type="text" class="form-control" name="nome" placeholder="Nome da carta">
+        </div>
+        <div class="col-md-2">
+            <input type="number" class="form-control" name="atk" placeholder="ATK">
+        </div>
+        <div class="col-md-2">
+            <input type="number" class="form-control" name="def" placeholder="DEF">
+        </div>
+        <div class="col-md-2">
+            <select class="form-select" name="type">
+                <option value="">Tipo</option>
+                <option>Aqua</option>
+                <option>Beast</option>
+                <option>Beast-Warrior</option>
+                <option>Dinosaur</option>
+                <option>Dragon</option>
+                <option>Fairy</option>
+                <option>Fiend</option>
+                <option>Fish</option>
+                <option>Insect</option>
+                <option>Machine</option>
+                <option>Plant</option>
+                <option>Pyro</option>
+                <option>Reptile</option>
+                <option>Rock</option>
+                <option>Sea Serpent</option>
+                <option>Spellcaster</option>
+                <option>Thunder</option>
+                <option>Warrior</option>
+                <option>Winged Beast</option>
+                <option>Zombie</option>
+            </select>
+        </div>
+        <div class="col-md-12">
+            <label>Star Guardians:</label><br>
+            <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" name="guardians" value="Jupiter"><label class="form-check-label">Jupiter</label></div>
+            <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" name="guardians" value="Mars"><label class="form-check-label">Mars</label></div>
+            <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" name="guardians" value="Mercury"><label class="form-check-label">Mercury</label></div>
+            <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" name="guardians" value="Moon"><label class="form-check-label">Moon</label></div>
+            <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" name="guardians" value="Neptune"><label class="form-check-label">Neptune</label></div>
+            <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" name="guardians" value="Pluto"><label class="form-check-label">Pluto</label></div>
+            <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" name="guardians" value="Saturn"><label class="form-check-label">Saturn</label></div>
+            <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" name="guardians" value="Sun"><label class="form-check-label">Sun</label></div>
+            <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" name="guardians" value="Uranus"><label class="form-check-label">Uranus</label></div>
+            <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" name="guardians" value="Venus"><label class="form-check-label">Venus</label></div>
+        </div>
+        <div class="col-md-12">
+            <button class="btn btn-primary">Filtrar</button>
+        </div>
+    </form>
+    <div class="table-responsive">
+        <table id="tabela-cartas" class="table table-striped table-hover table-bordered table-responsive">
+            <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Card</th>
+                <th>CardType</th>
+                <th>Type</th>
+                <th>GS1</th>
+                <th>GS2</th>
+                <th>Level</th>
+                <th>Atk</th>
+                <th>Def</th>
+                <th>Password</th>
+                <th>Starchip Cost</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${cartas.empty}" th:remove="tag">
+                <td colspan="11" class="text-center">Sem cartas!</td>
+            </tr>
+            <tr th:each="c : ${cartas}">
+                <td><a th:href="@{'/card/' + ${c.id}}" th:text="${c.id}">ID</a></td>
+                <td><a th:href="@{'/card/' + ${c.id}}" th:text="${c.nome}">Card</a></td>
+                <td th:text="${c.cardType}">CardType</td>
+                <td th:text="${c.type.name}">Type</td>
+                <td th:text="${c.guardianStar1.name}">GS1</td>
+                <td th:text="${c.guardianStar2.name}">GS2</td>
+                <td th:text="${c.level}">Level</td>
+                <td th:text="${c.atk}">Atk</td>
+                <td th:text="${c.def}">Def</td>
+                <td th:text="${c.password}">Password</td>
+                <td th:text="${c.starchipCost}">Starchip</td>
+            </tr>
+            </tbody>
+            <tfoot class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Card</th>
+                <th>CardType</th>
+                <th>Type</th>
+                <th>GS1</th>
+                <th>GS2</th>
+                <th>Level</th>
+                <th>Atk</th>
+                <th>Def</th>
+                <th>Password</th>
+                <th>Starchip Cost</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#tabela-cartas').DataTable({
+            paging: true,
+            ordering: true,
+            info: true,
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json'
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Duelistas</title>
+</head>
+<body>
+<h1>Duelistas</h1>
+<ul>
+  <li th:each="d : ${duelistas}" th:text="${d.nome}"></li>
+</ul>
+</body>
+</html>

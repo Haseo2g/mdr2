@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Cartas</title>
+</head>
+<body>
+<h1>Cartas</h1>
+<table>
+  <thead>
+  <tr>
+    <th> ID </th>
+    <th> Card </th>
+    <th> CardType </th>
+    <th> Type </th>
+    <th> GS1 </th>
+    <th> GS2 </th>
+    <th> Level </th>
+    <th> Atk </th>
+    <th> Def </th>
+    <th> Password </th>
+    <th> Starchip Cost </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:if="${cartas.empty}">
+    <td colspan="12"> Sem cartas! </td>
+  </tr>
+  <tr th:each="c : ${cartas}">
+    <td><span th:text="${c.id}"> ID </span></td>
+    <td><span th:text="${c.nome}"> Card </span></td>
+    <td><span th:text="${c.cardType}"> CardType </span></td>
+    <td><span th:text="${c.type}"> Type </span></td>
+    <td><span th:text="${c.guardianStar1}"> GS1 </span></td>
+    <td><span th:text="${c.guardianStar2}"> GS2 </span></td>
+    <td><span th:text="${c.level}"> Level </span></td>
+    <td><span th:text="${c.atk}"> Atk </span></td>
+    <td><span th:text="${c.def}"> Def </span></td>
+    <td><span th:text="${c.password}"> Password </span></td>
+    <td><span th:text="${c.starchipCost}"> Starchip Cost </span></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

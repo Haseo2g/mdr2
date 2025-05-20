@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html lang="en">
+        <head>
+        <meta charset="UTF-8">
+        <title>Duelistas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .duelist-img {
+            width: 50%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar"></div>
+<div class="container">
+    <h1>Duelists</h1>
+    <th:block th:if="${!#lists.isEmpty(duelists)}">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-6 col-sm-4 col-md-2 mb-4" th:each="d : ${duelists}">
+                    <img th:src="@{'/img/duelist/' + ${#numbers.formatInteger(d.id, 3)} + '.PNG'}" class="duelist-img" alt="Imagem">
+                    <a th:href="@{'/duelist/' + ${d.id}}" ><div class="mt-2" th:text="${d.nome}">Nome</div></a>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</div>
+</body>
+</html>
+</title>
+</head>
+<body>
+
+</body>
+</html>

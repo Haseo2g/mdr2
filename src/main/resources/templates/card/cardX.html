@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhe da Carta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        td {
+            vertical-align: middle;
+        }
+        img {
+            border-radius: 20px;
+        }
+  .fusion-group {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start; /* <-- Isso aqui garante alinhamento pelo topo */
+      gap: 1.5rem;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      background-color: #f9f9f9;
+      flex-wrap: wrap;
+  }
+
+  .fusion-result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 100px;
+  }
+
+  .material-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    flex: 1;
+    border-left: 1px dashed #ccc;
+    padding-left: 1rem;
+  }
+.card-preview {
+  width: 100px;
+  text-align: center;
+  word-wrap: break-word;
+  white-space: normal;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 160px; /* define uma altura fixa */
+}
+
+.card-preview img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.card-preview a {
+  margin-top: 0.3rem;
+  font-size: 0.9rem;
+  max-height: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
+
+        .card-item {
+  width: 100px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.card-item img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.card-name {
+  margin-top: 0.5rem;
+  height: 3.2em; /* Força mesma altura para todos os nomes */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2em;
+  display: block;
+}
+
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar"></div>
+<div class="container">
+    <h2 th:text="${carta.nome}"></h2>
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <img th:src="@{'/img/' + ${#numbers.formatInteger(carta.id, 3)} + '.PNG'}" class="img-fluid w-100">
+        </div>
+        <div class="col-md-8">
+            <ul class="list-group">
+                <li class="list-group-item">Number: <span th:text="${carta.id}"/></li>
+                <li class="list-group-item d-flex align-items-center gap-2">
+                    <img th:src="@{/img/type/{type}.PNG(type=${carta.type})}"
+                         class="img-fluid"
+                         th:alt="${carta.type}"
+                         style="height: 32px; width: 32px;" />
+                    <span th:text="${carta.type.name}"></span>
+                </li>
+                <th:block th:if="${carta.typeOrdinal < 20}">
+                    <li class="list-group-item">Atk: <span th:text="${carta.atk}"/></li>
+                    <li class="list-group-item">Def: <span th:text="${carta.def}"/></li>
+
+                    <li class="list-group-item d-flex align-items-center gap-2">
+                    <img th:src="@{/img/starguardian/{gs}.PNG(gs=${carta.guardianStar1})}"
+                        class="img-fluid"
+                        th:alt="${carta.guardianStar1}"
+                        style="height: 32px; width: 32px;" />
+                    <span th:text="${carta.guardianStar1.name}"></span>
+                    </li>
+
+                    <li class="list-group-item d-flex align-items-center gap-2">
+                    <img th:src="@{/img/starguardian/{gs}.PNG(gs=${carta.guardianStar2})}"
+                        class="img-fluid"
+                        th:alt="${carta.guardianStar2}"
+                        style="height: 32px; width: 32px;" />
+                    <span th:text="${carta.guardianStar2.name}"></span>
+                    </li>
+                </th:block>
+                <li class="list-group-item">Description: <span th:text="${carta.description}"/></li>
+                <li class="list-group-item">Password: <span th:text="${carta.password}"/></li>
+                <li class="list-group-item">Starchip Cost: <span th:text="${carta.starchipCost}"/></li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+    <div class="col-md-6">
+    <h4>Drops</h4>
+    <table class="table table-striped table-hover table-bordered table-responsive">
+        <thead class="table-dark">
+        <tr>
+            <th>Duelist</th>
+            <th>Rank</th>
+            <th>Chance</th>
+            <th>%</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${drops.empty}" th:remove="tag">
+            <td colspan="3" class="text-center">Sem fusões!</td>
+        </tr>
+        <tr th:each="d : ${drops}">
+            <td>
+                <img th:src="@{'/img/duelist/' + ${#numbers.formatInteger(d.duelista.id, 3)} + '.PNG'}" class="img-fluid">
+                <a th:href="@{'/duelist/' + ${d.duelista.id}}" th:text="${d.duelista.nome}">ID</a>
+            </td>
+            <td th:text="${d.rank.name}"
+                style="height: 32px; width: 25%;">Rank</td>
+            <td th:text="${d.chance} + ' / 2048'"
+                style="height: 32px; width: 20%;">Chance</td>
+            <td th:text="${#numbers.formatDecimal(d.chance / 2048.0 * 100, 1, 3)} + ' %'"
+                style="height: 32px; width: 20%;">%</td>
+        </tr>
+        </tbody>
+        <tfoot class="table-dark">
+        <tr>
+            <th>Duelist</th>
+            <th>Rank</th>
+            <th>Chance</th>
+            <th>%</th>
+        </tr>
+        </tfoot>
+    </table>
+    </div>
+    <div class="col-md-6">
+    <h4>Duelists</h4>
+    <table class="table table-striped table-hover table-bordered table-responsive">
+        <thead class="table-dark">
+        <tr>
+            <th>Duelist</th>
+            <th>Chance</th>
+            <th>%</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${decks.empty}" th:remove="tag">
+            <td colspan="3" class="text-center">No Duelists</td>
+        </tr>
+        <tr th:each="d : ${decks}">
+            <td>
+                <img th:src="@{'/img/duelist/' + ${#numbers.formatInteger(d.duelista.id, 3)} + '.PNG'}" class="img-fluid">
+                <a th:href="@{'/duelist/' + ${d.duelista.id}}" th:text="${d.duelista.nome}">ID</a>
+            </td>
+            <td th:text="${d.chance} + ' / 2048'"
+                style="height: 32px; width: 33%;">Chance</td>
+            <td th:text="${#numbers.formatDecimal(d.chance / 2048.0 * 100, 1, 3)} + ' %'"
+                style="height: 32px; width: 33%;">%</td>
+        </tr>
+        </tbody>
+        <tfoot class="table-dark">
+        <tr>
+            <th>Duelist</th>
+            <th>Chance</th>
+            <th>%</th>
+        </tr>
+        </tfoot>
+    </table></div></div>
+    <h4>Fusões</h4>
+    <div th:if="${fusoesAgrupadas.empty}">
+        <p class="text-center">Sem fusões!</p>
+    </div>
+
+    <div th:each="entry : ${fusoesAgrupadas}" class="fusion-group">
+            <!-- Resultado da Fusão -->
+        <!-- Resultado da Fusão -->
+        <div class="fusion-result">
+            <div class="card-preview">
+                <img th:src="@{'/img/' + ${#numbers.formatInteger(entry.key.id, 3)} + '.PNG'}" alt="Resultado">
+                <a th:href="@{'/card/' + ${entry.key.id}}" th:text="${entry.key.nome}">Resultado</a>
+            </div>
+        </div>
+
+        <!-- Materiais -->
+        <div class="material-list">
+            <div th:each="carta : ${entry.value}" class="card-preview">
+                <img th:src="@{'/img/' + ${#numbers.formatInteger(carta.id, 3)} + '.PNG'}" alt="Material">
+                <a th:href="@{'/card/' + ${carta.id}}" th:text="${carta.nome}">Carta</a>
+            </div>
+        </div>
+    </div>
+
+    <h4>Fusões</h4>
+    <table id="tabela-resultado" class="table table-striped table-hover table-bordered table-responsive">
+        <thead class="table-dark">
+        <tr>
+            <th>Card 1</th>
+            <th>Card 2</th>
+            <th>Result</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${resultado.empty}" th:remove="tag">
+            <td colspan="3" class="text-center">Can't be fused!</td>
+        </tr>
+        <tr th:each="result : ${resultado}">
+            <td>
+                <img th:src="@{'/img/' + ${#numbers.formatInteger(result.carta1.id, 3)} + '.PNG'}" class="img-fluid">
+                <a th:href="@{'/card/' + ${result.carta1.id}}" th:text="${result.carta1.nome}">ID</a>
+            </td>
+            <td>
+                <img th:src="@{'/img/' + ${#numbers.formatInteger(result.carta2.id, 3)} + '.PNG'}" class="img-fluid">
+                <a th:href="@{'/card/' + ${result.carta2.id}}" th:text="${result.carta2.nome}">Card</a>
+            </td>
+            <td>
+                <img th:src="@{'/img/' + ${#numbers.formatInteger(result.result.id, 3)} + '.PNG'}" class="img-fluid">
+                <a th:href="@{'/card/' + ${result.result.id}}" th:text="${result.result.nome}">Card</a>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot class="table-dark">
+        <tr>
+            <th>Card 1</th>
+            <th>Card 2</th>
+            <th>Result</th>
+        </tr>
+        </tfoot>
+    </table>
+    <th:block th:if="${!#lists.isEmpty(equips)}">
+        <h4>Equips</h4>
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-6 col-sm-4 col-md-2 mb-4" th:each="e : ${equips}">
+                    <img th:src="@{'/img/' + ${#numbers.formatInteger(e.equip.id, 3)} + '.PNG'}" class="img-fluid mx-auto d-block" alt="Imagem">
+                    <a th:href="@{'/card/' + ${e.equip.id}}" ><div class="mt-2" th:text="${e.equip.nome}">Nome</div></a>
+                </div>
+            </div>
+        </div>
+    </th:block>
+    <th:block th:if="${!#lists.isEmpty(equipable)}">
+        <h4>Equips</h4>
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-6 col-sm-4 col-md-2 mb-4" th:each="e : ${equipable}">
+                    <img th:src="@{'/img/' + ${#numbers.formatInteger(e.monstro.id, 3)} + '.PNG'}" class="img-fluid mx-auto d-block" alt="Imagem">
+                    <a th:href="@{'/card/' + ${e.monstro.id}}" ><div class="mt-2" th:text="${e.monstro.nome}">Nome</div></a>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</div>
+</body>
+</html>
